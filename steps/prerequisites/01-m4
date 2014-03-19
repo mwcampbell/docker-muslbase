@@ -8,7 +8,7 @@
 cp -a $DEPS/m4 .
 cd m4
 
-./configure LDFLAGS="--static" \
+./configure LDFLAGS="-static" \
  ac_cv_libsigsegv=no
 
 make $jobs

@@ -8,7 +8,7 @@
 cp -a $DEPS/make .
 cd make
 
-./configure LDFLAGS="--static" $configure_args --disable-nls --without-guile
+./configure LDFLAGS="-static" $configure_args --disable-nls --without-guile
 
 make $jobs
 make install

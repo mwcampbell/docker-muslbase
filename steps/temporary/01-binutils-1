@@ -12,7 +12,7 @@ rm -rf ../binutils-build
 mkdir ../binutils-build
 cd ../binutils-build
 
-../binutils/configure LDFLAGS="--static" \
+../binutils/configure LDFLAGS="-static" \
  --prefix=/tools \
  --host=$BUILD \
  --build=$BUILD \

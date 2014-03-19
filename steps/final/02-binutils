@@ -15,7 +15,7 @@ mkdir ../binutils-build
 cd ../binutils-build
 
 CFLAGS="-D_GNU_SOURCE" \
-../binutils/configure LDFLAGS="--static" $configure_args \
+../binutils/configure LDFLAGS="-static" $configure_args \
  --with-lib-path=/lib \
  --disable-shared \
  --disable-multilib \

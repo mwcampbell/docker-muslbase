@@ -8,7 +8,7 @@
 cp -a $DEPS/flex .
 cd flex
 
-./configure LDFLAGS="--static" --disable-nls
+./configure LDFLAGS="-static" --disable-nls
 
 make $jobs
 make install
