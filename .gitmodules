@@ -1,0 +1,3 @@
+[submodule "deps/musl"]
+	path = deps/musl
+	url = git://git.musl-libc.org/musl
