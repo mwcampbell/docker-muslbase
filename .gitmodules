@@ -13,3 +13,6 @@
 [submodule "deps/make"]
 	path = deps/make
 	url = git://github.com/mwcampbell/make
+[submodule "deps/m4"]
+	path = deps/m4
+	url = git://github.com/mwcampbell/m4
