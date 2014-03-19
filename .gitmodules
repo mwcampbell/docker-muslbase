@@ -25,3 +25,6 @@
 [submodule "deps/mpc"]
 	path = deps/mpc
 	url = git://github.com/mwcampbell/mpc
+[submodule "deps/mpfr"]
+	path = deps/mpfr
+	url = git://github.com/mwcampbell/mpfr
