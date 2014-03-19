@@ -10,3 +10,6 @@
 [submodule "deps/busybox"]
 	path = deps/busybox
 	url = git://busybox.net/busybox
+[submodule "deps/make"]
+	path = deps/make
+	url = git://github.com/mwcampbell/make
