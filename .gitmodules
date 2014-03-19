@@ -22,3 +22,6 @@
 [submodule "deps/gmp"]
 	path = deps/gmp
 	url = git://github.com/mwcampbell/gmp
+[submodule "deps/mpc"]
+	path = deps/mpc
+	url = git://github.com/mwcampbell/mpc
