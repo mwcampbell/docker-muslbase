@@ -4,3 +4,6 @@
 [submodule "deps/binutils"]
 	path = deps/binutils
 	url = git://sourceware.org/git/binutils
+[submodule "deps/gcc"]
+	path = deps/gcc
+	url = git://gcc.gnu.org/git/gcc
