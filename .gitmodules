@@ -16,3 +16,6 @@
 [submodule "deps/m4"]
 	path = deps/m4
 	url = git://github.com/mwcampbell/m4
+[submodule "deps/flex"]
+	path = deps/flex
+	url = git://github.com/mwcampbell/flex
