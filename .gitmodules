@@ -7,3 +7,6 @@
 [submodule "deps/gcc"]
 	path = deps/gcc
 	url = git://gcc.gnu.org/git/gcc
+[submodule "deps/busybox"]
+	path = deps/busybox
+	url = git://busybox.net/busybox
