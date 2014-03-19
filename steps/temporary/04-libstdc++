@@ -1,0 +1,85 @@
+# Derived from Dragora
+# Copyright (C) 2013 Matias A. Fonzo.
+# Modified by Matt Campbell
+#
+# This script is free software: you have unlimited permission
+# to copy, distribute and modify it.
+
+version=4.8.2
+
+cp -a $DEPS/gcc .
+cd gcc
+
+# x86
+for file in \
+ gcc/config/linux.h gcc/config/i386/linux.h gcc/config/i386/linux64.h gcc/config/i386/sysv4.h ; \
+do \
+  sed -i \
+   -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+   -e 's@lib/ld-linux.so.2@lib/ld-musl-i386.so.1@' \
+   -e 's@lib64/ld-linux-x86-64.so.2@lib/ld-musl-x86_64.so.1@' \
+   -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# MIPS
+for file in gcc/config/mips/linux64.h gcc/config/mips/linux.h ; do
+  sed -i \
+      -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+      -e 's@lib/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib32/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib64/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# ARM
+for file in gcc/config/arm/linux-eabi.h gcc/config/arm/linux-elf.h ; do
+  sed -i \
+      -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+      -e 's@lib/ld-linux.so.2@lib/ld-musl-arm.so.1@' \
+      -e 's@lib/ld-linux.so.3@lib/ld-musl-arm.so.1@' \
+      -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# Avoid specific Glibc code
+( cd libstdc++-v3/config/os
+  mv gnu-linux gnu-linux.orig
+  cp -r generic gnu-linux
+  cp gnu-linux.orig/arm-eabi-extra.ver gnu-linux
+)
+
+rm -rf ../gcc-build
+mkdir ../gcc-build
+cd ../gcc-build
+
+CPPFLAGS="-I/tools/include" \
+../gcc/libstdc++-v3/configure \
+ --prefix=/tools \
+ --libdir=/tools/lib \
+ --libexecdir=/tools/lib \
+ --host=$TARGET \
+ --enable-clocale=generic \
+ --disable-multilib \
+ --disable-nls \
+ --disable-shared \
+ --disable-libstdcxx-threads \
+ --disable-libstdcxx-pch \
+ --disable-libstdcxx-verbose \
+ --with-gxx-include-dir=/tools/${TARGET}/include/c++/${version}
+
+make $jobs BOOT_LDFLAGS="-static" LDFLAGS="-static"
+make install

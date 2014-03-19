@@ -1,0 +1,87 @@
+# Derived from Dragora
+# Copyright (C) 2012-2013 Matias A. Fonzo.
+# Modified by Matt Campbell
+#
+# This recipe is free software: you have unlimited permission
+# to copy, distribute and modify it.
+
+machine_type=$(gcc -dumpmachine)
+
+cp -a $DEPS/gcc .
+cd gcc
+
+patch -Np0 -i ${PATCHDIR}/gcc/gcc-nofixincludes
+patch -Np0 -i ${PATCHDIR}/gcc/gcc-libiberty
+
+# x86
+for file in \
+ gcc/config/linux.h gcc/config/i386/linux.h gcc/config/i386/linux64.h gcc/config/i386/sysv4.h ; \
+do \
+  sed -i \
+      -e 's@lib/ld-linux.so.2@lib/ld-musl-i386.so.1@' \
+      -e 's@lib64/ld-linux-x86-64.so.2@lib/ld-musl-x86_64.so.1@' \
+      $file ; \
+done
+
+# MIPS
+for file in gcc/config/mips/linux64.h gcc/config/mips/linux.h ; do \
+  sed -i \
+      -e 's@lib/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib32/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib64/ld.so.1@lib/ld-musl-mips.so.1@' \
+      $file ; \
+done
+
+# ARM
+for file in gcc/config/arm/linux-eabi.h gcc/config/arm/linux-elf.h ; do \
+  sed -i \
+      -e 's@lib/ld-linux.so.2@lib/ld-musl-arm.so.1@' \
+      -e 's@lib/ld-linux.so.3@lib/ld-musl-arm.so.1@' \
+      $file ; \
+done
+
+# Avoid specific Glibc code
+( cd libstdc++-v3/config/os && \
+  mv gnu-linux gnu-linux.orig ; \
+  cp -r generic gnu-linux ; \
+  cp gnu-linux.orig/arm-eabi-extra.ver gnu-linux ; \
+)
+
+cp -a $DEPS/gmp .
+cp -a $DEPS/mpc .
+cp -a $DEPS/mpfr .
+
+rm -rf ../gcc-build
+mkdir ../gcc-build
+cd ../gcc-build
+
+../gcc/configure $configure_args \
+ --enable-threads=posix \
+ --enable-__cxa_atexit \
+ --enable-clocale=generic \
+ --enable-languages=c,c++ \
+ --disable-libgomp \
+ --disable-libitm \
+ --enable-libssp \
+ --enable-tls \
+ --enable-shared \
+ --disable-multilib \
+ --disable-nls \
+ --disable-libstdcxx-pch \
+ --disable-libstdcxx-verbose \
+ --disable-libmudflap \
+ --disable-libquadmath \
+ --disable-libsanitizer \
+ --disable-install-libiberty \
+ --with-mpfr-include=$(pwd)/../gcc/mpfr/src \
+ --with-mpfr-lib=$(pwd)/mpfr/src/.libs
+
+make $jobs BOOT_LDFLAGS="-static" LDFLAGS="-static"
+
+rm -f /lib/libstdc++*
+
+make install
+
+ln -sf gcc /bin/cc
+ln -sf g++ /bin/c++
+ln -sf ../bin/cpp /lib/cpp

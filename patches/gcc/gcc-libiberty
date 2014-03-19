@@ -1,0 +1,12 @@
+# From Dragora
+--- libiberty/Makefile.in.orig	2012-08-06 11:34:27.000000000 -0300
++++ libiberty/Makefile.in	2012-09-29 21:45:48.000000000 -0300
+@@ -342,7 +342,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ install-strip: install
+ 
+ .PHONY: install install-strip

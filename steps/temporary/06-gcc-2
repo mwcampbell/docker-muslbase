@@ -1,0 +1,120 @@
+# Derived from Dragora
+# Copyright (C) 2012-2013 Matias A. Fonzo.
+# Modified by Matt Campbell
+#
+# This script is free software: you have unlimited permission
+# to copy, distribute and modify it.
+
+cp -a $DEPS/gcc .
+cd gcc
+
+patch -Np0 -i ${PATCHDIR}/gcc/gcc-nofixincludes
+
+# x86
+for file in \
+ gcc/config/linux.h gcc/config/i386/linux.h gcc/config/i386/linux64.h gcc/config/i386/sysv4.h ; \
+do \
+  sed -i \
+   -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+   -e 's@lib/ld-linux.so.2@lib/ld-musl-i386.so.1@' \
+   -e 's@lib64/ld-linux-x86-64.so.2@lib/ld-musl-x86_64.so.1@' \
+   -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# MIPS
+for file in gcc/config/mips/linux64.h gcc/config/mips/linux.h ; do
+  sed -i \
+      -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+      -e 's@lib/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib32/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@lib64/ld.so.1@lib/ld-musl-mips.so.1@' \
+      -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# ARM
+for file in gcc/config/arm/linux-eabi.h gcc/config/arm/linux-elf.h ; do
+  sed -i \
+      -e 's@/lib\(64\)\{0,1\}\(32\)\{0,1\}/ld@/tools&@g' \
+      -e 's@lib/ld-linux.so.2@lib/ld-musl-arm.so.1@' \
+      -e 's@lib/ld-linux.so.3@lib/ld-musl-arm.so.1@' \
+      -e 's@/usr@/tools@g' $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+done
+
+# GCC built-in prerequisites (if available)
+cp -a $DEPS/gmp .
+cp -a $DEPS/mpc .
+cp -a $DEPS/mpfr .
+
+# Avoid specific Glibc code
+( cd libstdc++-v3/config/os
+  mv gnu-linux gnu-linux.orig
+  cp -r generic gnu-linux
+  cp gnu-linux.orig/arm-eabi-extra.ver gnu-linux
+)
+
+cat gcc/limitx.h gcc/glimits.h gcc/limity.h \
+ > $(dirname $(${TARGET}-gcc -print-libgcc-file-name))/include-fixed/limits.h
+
+patch -Np0 -i ${PATCHDIR}/gcc/gcc-fomit-frame-pointer
+
+# Do not build the .info files. They are not needed here         
+sed -i 's/BUILD_INFO=info/BUILD_INFO=/' gcc/configure
+
+rm -rf ../gcc-build
+mkdir ../gcc-build
+cd ../gcc-build
+
+CC="${TARGET}-${CC}" \
+CXX="${TARGET}-${CXX}" \
+AR="${TARGET}-ar" \
+RANLIB="${TARGET}-ranlib" \
+CPPFLAGS="-I/tools/include" \
+../gcc/configure \
+ --prefix=/tools \
+ --libdir=/tools/lib \
+ --libexecdir=/tools/lib \
+ --with-local-prefix=/tools \
+ --with-native-system-header-dir=/tools/include \
+ --with-mpfr-include=$(pwd)/../gcc/mpfr/src \
+ --with-mpfr-lib=$(pwd)/mpfr/src/.libs \
+ --enable-clocale=generic \
+ --enable-threads=posix \
+ --enable-__cxa_atexit \
+ --enable-languages=c,c++ \
+ --disable-shared \
+ --disable-libstdcxx-pch \
+ --disable-libstdcxx-verbose \
+ --disable-multilib \
+ --disable-bootstrap \
+ --disable-libsanitizer \
+ --disable-libitm \
+ --disable-libgomp \
+ --disable-libmudflap \
+ --disable-libquadmath \
+ --disable-nls \
+ --without-ppl \
+ --without-cloog
+
+make $jobs BOOT_LDFLAGS="-static" LDFLAGS="-static"
+make install
+
+# Necessary symlink
+ln -sf gcc /tools/bin/cc
+
+# Remove the first-pass toolchain
+find / tools -depth -name "*$TARGET*" | xargs rm -rf

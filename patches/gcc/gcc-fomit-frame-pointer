@@ -1,0 +1,12 @@
+# From Dragora
+--- gcc/Makefile.in.orig	2012-05-18 13:32:05.000000000 -0300
++++ gcc/Makefile.in	2012-09-15 21:32:29.000000000 -0300
+@@ -131,7 +131,7 @@
+ # CFLAGS is for the user to override to, e.g., do a cross build with -O2.
+ # TCFLAGS is used for compilations with the GCC just built.
+ # T_CFLAGS is used for all compilations and is overridden by t-* files.
+-T_CFLAGS =
++T_CFLAGS = -fomit-frame-pointer
+ TCFLAGS =
+ CFLAGS = @CFLAGS@
+ CXXFLAGS = @CXXFLAGS@
