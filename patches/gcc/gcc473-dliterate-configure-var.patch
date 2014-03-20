@@ -1,0 +1,14 @@
+# From Sabotage
+--- gcc-4.7.3/gcc/configure
++++ gcc-4.7.3patched/gcc/configure
+@@ -26886,7 +26886,9 @@
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking dl_iterate_phdr in target C library" >&5
+ $as_echo_n "checking dl_iterate_phdr in target C library... " >&6; }
+-gcc_cv_target_dl_iterate_phdr=unknown
++
++# musl specific patch - we always set gcc_cv_target_dl_iterate_phdr to yes
++gcc_cv_target_dl_iterate_phdr=yes
+ case "$target" in
+   # Restrict to Solaris 11+.  While most of the Solaris 11 linker changes
+   # were backported to Solaris 10 Update 10, dl_iterate_phdr only lives in

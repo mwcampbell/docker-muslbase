@@ -12,6 +12,8 @@ cd gcc
 
 patch -Np0 -i ${PATCHDIR}/gcc/gcc-nofixincludes
 patch -Np0 -i ${PATCHDIR}/gcc/gcc-libiberty
+patch -Np1 -i ${PATCHDIR}/gcc/gcc473-dliterate-configure-var.patch
+patch -Np1 -i ${PATCHDIR}/gcc/gcc482-unwind-dliterate.patch
 
 # x86
 for file in \
