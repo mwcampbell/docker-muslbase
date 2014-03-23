@@ -1,1 +1,2 @@
-/rootfs/rootfs.tar
+/rootfs/full/rootfs.tar
+/rootfs/runtime/rootfs.tar

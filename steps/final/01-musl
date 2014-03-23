@@ -23,6 +23,9 @@ ln -sf /lib/libc.so /bin/ldd
 # Dummy for libtool
 ln -s true /bin/ldconfig
 
+cp -a /lib/*.so* /runtime/lib
+cp -a /bin/* /runtime/bin
+
 # Adjust the toolchain (if necessary)
 if [ -x /tools/bin/adjust-toolchain ]; then
   /tools/bin/adjust-toolchain

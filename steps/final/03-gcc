@@ -87,3 +87,5 @@ make install
 ln -sf gcc /bin/cc
 ln -sf g++ /bin/c++
 ln -sf ../bin/cpp /lib/cpp
+
+cp -a /lib/*.so* /runtime/lib

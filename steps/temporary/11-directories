@@ -5,74 +5,77 @@
 # This script is free software: you have unlimited permission
 # to copy, distribute and modify it.
 
-cd $ROOT
-mkdir bin
-mkdir dev
-mkdir dev/pts
-mkdir dev/shm
-chmod 1777 dev/shm
-ln -s /proc/self/fd dev/fd
-ln -s /proc/self/fd/0 dev/stdin
-ln -s /proc/self/fd/1 dev/stdout
-ln -s /proc/self/fd/2 dev/stderr
-mkdir etc
-cp $SRC/etc/passwd etc
-cp $SRC/etc/group etc
-cp $SRC/etc/services etc
-mkdir include
-mkdir lib
-ln -s lib lib64
-mkdir local
-ln -s share/doc local/doc
-mkdir local/share
-mkdir local/share/doc
-mkdir local/share/man
-mkdir local/share/man/man1
-mkdir local/share/man/man2
-mkdir local/share/man/man3
-mkdir local/share/man/man4
-mkdir local/share/man/man5
-mkdir local/share/man/man6
-mkdir local/share/man/man7
-mkdir local/share/man/man8
-mkdir local/share/info
-mkdir local/include
-mkdir local/lib
-mkdir local/bin
-mkdir local/src
-mkdir local/games
-ln -s share/man local/man
-mkdir local/etc
-ln -s share/info local/info
-mkdir local/sbin
-mkdir proc
-chmod 555 proc
-mkdir run
-mkdir run/lock
-mkdir sbin
-mkdir share
-mkdir share/doc
-ln -s ../lib/pkgconfig share/pkgconfig
-mkdir share/man
-mkdir share/man/man1
-mkdir share/man/man2
-mkdir share/man/man3
-mkdir share/man/man4
-mkdir share/man/man5
-mkdir share/man/man6
-mkdir share/man/man7
-mkdir share/man/man8
-mkdir share/info
-mkdir sys
-mkdir tmp
-chmod 1777 tmp
-ln -s . usr
-mkdir var
-mkdir var/lib
-mkdir var/cache
-mkdir var/spool
-ln -s ../run var/run
-ln -s ../tmp var/tmp
-ln -s ../run/lock var/lock
-mkdir var/mail
-mkdir var/log
+for root in $ROOT $RUNTIME_ROOT
+do
+  cd $root
+  mkdir bin
+  mkdir dev
+  mkdir dev/pts
+  mkdir dev/shm
+  chmod 1777 dev/shm
+  ln -s /proc/self/fd dev/fd
+  ln -s /proc/self/fd/0 dev/stdin
+  ln -s /proc/self/fd/1 dev/stdout
+  ln -s /proc/self/fd/2 dev/stderr
+  mkdir etc
+  cp $SRC/etc/passwd etc
+  cp $SRC/etc/group etc
+  cp $SRC/etc/services etc
+  mkdir include
+  mkdir lib
+  ln -s lib lib64
+  mkdir local
+  ln -s share/doc local/doc
+  mkdir local/share
+  mkdir local/share/doc
+  mkdir local/share/man
+  mkdir local/share/man/man1
+  mkdir local/share/man/man2
+  mkdir local/share/man/man3
+  mkdir local/share/man/man4
+  mkdir local/share/man/man5
+  mkdir local/share/man/man6
+  mkdir local/share/man/man7
+  mkdir local/share/man/man8
+  mkdir local/share/info
+  mkdir local/include
+  mkdir local/lib
+  mkdir local/bin
+  mkdir local/src
+  mkdir local/games
+  ln -s share/man local/man
+  mkdir local/etc
+  ln -s share/info local/info
+  mkdir local/sbin
+  mkdir proc
+  chmod 555 proc
+  mkdir run
+  mkdir run/lock
+  mkdir sbin
+  mkdir share
+  mkdir share/doc
+  ln -s ../lib/pkgconfig share/pkgconfig
+  mkdir share/man
+  mkdir share/man/man1
+  mkdir share/man/man2
+  mkdir share/man/man3
+  mkdir share/man/man4
+  mkdir share/man/man5
+  mkdir share/man/man6
+  mkdir share/man/man7
+  mkdir share/man/man8
+  mkdir share/info
+  mkdir sys
+  mkdir tmp
+  chmod 1777 tmp
+  ln -s . usr
+  mkdir var
+  mkdir var/lib
+  mkdir var/cache
+  mkdir var/spool
+  ln -s ../run var/run
+  ln -s ../tmp var/tmp
+  ln -s ../run/lock var/lock
+  mkdir var/mail
+  mkdir var/log
+done

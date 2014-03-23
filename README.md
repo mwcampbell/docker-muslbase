@@ -4,28 +4,8 @@ This is a minimal self-hosting system for Docker containers, based on [musl libc
 
 ## Building
 
-First, you need to fetch the dependencies, which are in Git submodules:
+Run the bootstrap script in the top-level directory of your working copy as follows:
 
-    git submodule update --init
+    ./bootstrap.sh username
 
-This system can be built from either itself or Debian Wheezy. To start with Debian Wheezy:
-
-    docker build --rm -t=mwcampbell/muslbase-build-base buildbase/debian
-
-To start with muslbase itself:
-
-    docker build --rm -t=mwcampbell/muslbase-build-base buildbase/selfhost
-
-Then, to run the main build process:
-
-    docker build --rm -t=yourname/muslbase-build .
-
-Finally, to create the actual image:
-
-    docker run --rm yourname/muslbase-build cat /rootfs.tar > rootfs/rootfs.tar
-    docker build --rm -t=yourname/muslbase rootfs
-
-Now you can clean up:
-
-    docker rmi mwcampbell/muslbase-build-base
-    docker rmi yourname/muslbase-build
+Where `username` is the username you wish to use for your Docker image tags. This will often be your username on docker.io.
