@@ -11,9 +11,14 @@ docker rmi mwcampbell/muslbase-build-base || true
 docker rmi $username/muslbase-build || true
 for buildbase in debian selfhost selfhost
 do
+  if [ "$buildbase" = "selfhost" ]
+  then
+    docker tag $username/muslbase mwcampbell/muslbase-build-base
+  else
+    docker build --rm -t=mwcampbell/muslbase-build-base buildbase/$buildbase
+  fi
   docker rmi $username/muslbase || true
   docker rmi $username/muslbase-runtime || true
-  docker build --rm -t=mwcampbell/muslbase-build-base buildbase/$buildbase
   docker build --rm -t=$username/muslbase-build .
   docker run --rm $username/muslbase-build cat /rootfs.tar > rootfs/full/rootfs.tar
   docker build --rm -t=$username/muslbase rootfs/full
