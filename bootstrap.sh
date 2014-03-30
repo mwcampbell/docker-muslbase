@@ -19,6 +19,7 @@ do
   fi
   docker rmi $username/muslbase || true
   docker rmi $username/muslbase-runtime || true
+  docker rmi $username/muslbase-static-runtime || true
   docker build --rm -t=$username/muslbase-build .
   docker run --rm $username/muslbase-build cat /rootfs.tar > rootfs/full/rootfs.tar
   docker build --rm -t=$username/muslbase rootfs/full
@@ -26,6 +27,9 @@ do
   docker run --rm $username/muslbase-build cat /runtime-rootfs.tar > rootfs/runtime/rootfs.tar
   docker build --rm -t=$username/muslbase-runtime rootfs/runtime
   rm rootfs/runtime/rootfs.tar
+  docker run --rm $username/muslbase-build cat /static-runtime-rootfs.tar > rootfs/static-runtime/rootfs.tar
+  docker build --rm -t=$username/muslbase-static-runtime rootfs/static-runtime
+  rm rootfs/static-runtime/rootfs.tar
   docker rmi mwcampbell/muslbase-build-base
   docker rmi $username/muslbase-build
 done

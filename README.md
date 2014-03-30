@@ -14,3 +14,4 @@ This process produces the following images:
 
     * username/muslbase: full self-hosting system (musl, BusyBox, and toolchain)
     * username/muslbase-runtime: runtime-only system (no toolchain)
+    * username/muslbase-static-runtime: runtime-only system for statically linked programs (no toolchain or shared libraries)

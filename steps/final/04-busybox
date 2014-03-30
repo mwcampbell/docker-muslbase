@@ -29,3 +29,9 @@ for p in $(./busybox --list)
 do
   ln -sf busybox /runtime/bin/$p
 done
+
+cp -a busybox /static-runtime/bin
+for p in $(./busybox --list)
+do
+  ln -sf busybox /static-runtime/bin/$p
+done
