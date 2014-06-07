@@ -25,3 +25,6 @@
 [submodule "deps/mpfr"]
 	path = deps/mpfr
 	url = git://github.com/mwcampbell/mpfr
+[submodule "deps/binutils"]
+	path = deps/binutils
+	url = git://sourceware.org/git/binutils-gdb.git
