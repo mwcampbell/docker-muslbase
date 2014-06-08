@@ -1,0 +1,6 @@
+cp -a $DEPS/help2man .
+cd help2man
+
+./configure
+make
+make install

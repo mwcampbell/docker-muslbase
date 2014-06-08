@@ -1,0 +1,6 @@
+cp -a $DEPS/perl .
+cd perl
+
+./Configure -d -e -s
+make $jobs
+make install

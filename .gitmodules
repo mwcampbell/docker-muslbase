@@ -28,3 +28,15 @@
 [submodule "deps/binutils"]
 	path = deps/binutils
 	url = git://sourceware.org/git/binutils-gdb.git
+[submodule "deps/bison"]
+	path = deps/bison
+	url = git://github.com/mwcampbell/bison
+[submodule "deps/perl"]
+	path = deps/perl
+	url = git://perl5.git.perl.org/perl
+[submodule "deps/help2man"]
+	path = deps/help2man
+	url = git://github.com/mwcampbell/help2man
+[submodule "deps/texinfo"]
+	path = deps/texinfo
+	url = git://github.com/mwcampbell/texinfo

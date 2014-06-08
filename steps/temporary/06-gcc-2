@@ -11,6 +11,7 @@ cd gcc
 patch -Np0 -i ${PATCHDIR}/gcc/gcc-nofixincludes
 patch -Np1 -i ${PATCHDIR}/gcc/gcc473-dliterate-configure-var.patch
 patch -Np1 -i ${PATCHDIR}/gcc/gcc482-unwind-dliterate.patch
+patch -Np1 -i ${PATCHDIR}/gcc/gcc482-libssp-link.patch
 
 # x86
 for file in \
@@ -81,6 +82,8 @@ rm -rf ../gcc-build
 mkdir ../gcc-build
 cd ../gcc-build
 
+export gcc_cv_libc_provides_ssp=yes
+
 CC="${TARGET}-${CC}" \
 CXX="${TARGET}-${CXX}" \
 AR="${TARGET}-ar" \
@@ -105,6 +108,7 @@ CPPFLAGS="-I/tools/include" \
  --disable-bootstrap \
  --disable-libsanitizer \
  --disable-libitm \
+ --enable-libssp \
  --disable-libgomp \
  --disable-libmudflap \
  --disable-libquadmath \
@@ -114,6 +118,10 @@ CPPFLAGS="-I/tools/include" \
 
 make $jobs BOOT_LDFLAGS="-static" LDFLAGS="-static"
 make install
+
+# Remove libssp proper since we're using musl's implementation,
+# but keep libssp_nonshared
+rm -f /tools/lib/libssp.*
 
 # Necessary symlink
 ln -sf gcc /tools/bin/cc

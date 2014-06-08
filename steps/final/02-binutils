@@ -10,6 +10,8 @@ machine_type=$(gcc -dumpmachine)
 cp -a $DEPS/binutils .
 cd binutils
 
+patch -Np1 -i ${PATCHDIR}/binutils/binutils-24-configure_ash.patch
+
 rm -rf ../binutils-build
 mkdir ../binutils-build
 cd ../binutils-build

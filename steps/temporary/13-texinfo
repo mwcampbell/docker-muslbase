@@ -1,0 +1,6 @@
+cp -a $DEPS/texinfo .
+cd texinfo
+
+./configure --prefix=/tools --disable-nls
+make $jobs
+make install
