@@ -8,9 +8,6 @@
 cp -a $DEPS/busybox .
 cd busybox
 
-patch -Np1 < ${PATCHDIR}/busybox/busybox-awk-emptyfun.patch
-patch -Np1 < ${PATCHDIR}/busybox/busybox-awk-int-overflow.patch
-
 make mrproper
 
 cat ${PATCHDIR}/busybox/busybox-config > .config
