@@ -1,3 +1,4 @@
 FROM debian:wheezy
-RUN apt-get -y update
-RUN apt-get -y install libc6-dev binutils gcc g++ make patch
+MAINTAINER Matt Campbell <mattcampbell@pobox.com>
+
+RUN apt-get -y update && apt-get -y install libc6-dev binutils gcc g++ make patch
